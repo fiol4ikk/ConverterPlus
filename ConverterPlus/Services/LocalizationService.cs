@@ -36,6 +36,7 @@ internal static class LocalizationService
             ["supportedFormats"] = ("Images  ·  Audio  ·  Video  ·  Documents", "Изображения  ·  Аудио  ·  Видео  ·  Документы"),
             ["headerFile"] = ("File", "Файл"),
             ["headerSize"] = ("Size", "Размер"),
+            ["headerSizeCompare"] = ("Source / result", "Исх. / итог"),
             ["headerFormat"] = ("Format", "Формат"),
             ["headerStatus"] = ("Status", "Состояние"),
             ["copyPath"] = ("Copy path", "Копировать путь"),

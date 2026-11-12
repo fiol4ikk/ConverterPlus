@@ -135,7 +135,7 @@ public partial class MainWindow : Window
         DropHint.Text = T("dropHint");
         FormatsHint.Text = T("supportedFormats");
         FileColumnHeader.Text = T("headerFile");
-        SizeColumnHeader.Text = T("headerSize");
+        SizeColumnHeader.Text = T("headerSizeCompare");
         FormatColumnHeader.Text = T("headerFormat");
         StatusColumnHeader.Text = T("headerStatus");
         QualityLabel.Text = T("quality");
@@ -680,6 +680,7 @@ public partial class MainWindow : Window
                 _etaCurrentEstimate = EstimateDuration(item);
                 UpdateEta();
                 item.IsBusy = true;
+                item.OutputSize = string.Empty;
                 item.Status = T(_compressionMode ? "compressing" : "converting");
                 try
                 {
@@ -691,6 +692,7 @@ public partial class MainWindow : Window
                     {
                         var outputPath = GetUniqueOutputPath(item);
                         outputBytes = await ConverterEngine.ConvertAsync(item, outputPath, _conversionCts.Token, targetBytes);
+                        item.OutputSize = FormatCatalog.FormatSize(outputBytes);
                     }
                     finally
                     {

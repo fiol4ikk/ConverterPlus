@@ -141,11 +141,12 @@ internal static class ConverterEngine
         long? totalBitrate = duration is > 0
             ? (long)(targetBytes!.Value * 8d * 0.9d / duration.Value)
             : null;
+        var targetAudioMinimum = item.Kind == FileKind.Video ? 16_000 : 32_000;
         var targetAudioBitrate = totalBitrate.HasValue
-            ? Math.Clamp((long)(item.Kind == FileKind.Video ? Math.Min(128_000, totalBitrate.Value * 0.12) : totalBitrate.Value), 32_000, 512_000)
+            ? Math.Clamp((long)(item.Kind == FileKind.Video ? Math.Min(128_000, totalBitrate.Value * 0.12) : totalBitrate.Value), targetAudioMinimum, 512_000)
             : (long?)null;
         var targetVideoBitrate = totalBitrate.HasValue
-            ? Math.Max(64_000, totalBitrate.Value - (item.Kind == FileKind.Video ? targetAudioBitrate ?? 0 : 0))
+            ? Math.Max(16_000, totalBitrate.Value - (item.Kind == FileKind.Video ? targetAudioBitrate ?? 0 : 0))
             : (long?)null;
         var chosenAudioBitrate = targetAudioBitrate.HasValue ? FormatBitrate(targetAudioBitrate.Value) : audioBitrate;
         var chosenVideoBitrate = targetVideoBitrate.HasValue ? FormatBitrate(targetVideoBitrate.Value) : null;
@@ -343,7 +344,7 @@ internal static class ConverterEngine
     }
 
     private static string FormatBitrate(long bitsPerSecond) =>
-        $"{Math.Max(32, (long)Math.Round(bitsPerSecond / 1000d))}k";
+        $"{Math.Max(16, (long)Math.Round(bitsPerSecond / 1000d))}k";
 
     private static async Task ConvertOfficeAsync(string sourcePath, string targetFormat, string outputPath, CancellationToken cancellationToken)
     {

@@ -167,8 +167,8 @@
                     <Grid Margin="10,0,8,6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2.6*" />
-                            <ColumnDefinition Width="0.75*" />
-                            <ColumnDefinition Width="1.05*" />
+                            <ColumnDefinition Width="0.95*" />
+                            <ColumnDefinition Width="0.9*" />
                             <ColumnDefinition Width="1.2*" />
                             <ColumnDefinition Width="46" />
                         </Grid.ColumnDefinitions>
@@ -194,26 +194,47 @@
                                         <Grid MinHeight="44" VerticalAlignment="Center">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="2.6*" />
-                                                <ColumnDefinition Width="0.75*" />
-                                                <ColumnDefinition Width="1.05*" />
+                                                <ColumnDefinition Width="0.95*" />
+                                                <ColumnDefinition Width="0.9*" />
                                                 <ColumnDefinition Width="1.2*" />
                                                 <ColumnDefinition Width="46" />
                                             </Grid.ColumnDefinitions>
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Grid Grid.Column="0" VerticalAlignment="Center">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="32" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
                                                 <Border Width="32" Height="32" CornerRadius="7" Background="{DynamicResource FileBadge}">
                                                     <TextBlock Text="{Binding SourceExtension}" FontSize="9" FontWeight="SemiBold"
                                                                Foreground="{DynamicResource Accent}" HorizontalAlignment="Center"
                                                                VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
                                                 </Border>
-                                                <StackPanel Margin="11,0,8,0" VerticalAlignment="Center">
+                                                <StackPanel Grid.Column="1" Margin="11,0,8,0" VerticalAlignment="Center" MinWidth="0">
                                                     <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="Medium"
-                                                               Foreground="{DynamicResource Ink}" TextTrimming="CharacterEllipsis" />
+                                                               Foreground="{DynamicResource Ink}" TextTrimming="CharacterEllipsis"
+                                                               ToolTip="{Binding Name}" />
                                                     <TextBlock Text="{Binding SourcePath}" FontSize="10" Foreground="{DynamicResource Muted}"
-                                                               TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+                                                               TextTrimming="CharacterEllipsis" Margin="0,2,0,0"
+                                                               ToolTip="{Binding SourcePath}" />
                                                 </StackPanel>
+                                            </Grid>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Size}" FontSize="10" Foreground="{DynamicResource Muted}"
+                                                           TextTrimming="CharacterEllipsis" ToolTip="{Binding Size}" />
+                                                <TextBlock Text="{Binding OutputSize}" FontSize="11" Foreground="{DynamicResource Accent}"
+                                                           TextTrimming="CharacterEllipsis" ToolTip="{Binding OutputSize}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding OutputSize}" Value="">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
                                             </StackPanel>
-                                            <TextBlock Grid.Column="1" Text="{Binding Size}" FontSize="11"
-                                                       Foreground="{DynamicResource Ink}" VerticalAlignment="Center" />
                                             <ComboBox Grid.Column="2" ItemsSource="{Binding TargetFormats}"
                                                       SelectedItem="{Binding TargetFormat, UpdateSourceTrigger=PropertyChanged}"
                                                       VerticalAlignment="Center" MinWidth="0">

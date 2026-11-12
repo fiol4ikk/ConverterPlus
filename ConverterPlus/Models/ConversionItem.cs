@@ -8,6 +8,7 @@ public sealed class ConversionItem : INotifyPropertyChanged
 {
     private string _targetFormat;
     private string _status = "Готов к конвертации";
+    private string _outputSize = string.Empty;
     private bool _isBusy;
     private bool _isCompressionMode;
 
@@ -30,6 +31,16 @@ public sealed class ConversionItem : INotifyPropertyChanged
     public string Name { get; }
     public string SourceExtension { get; }
     public string Size { get; }
+    public string OutputSize
+    {
+        get => _outputSize;
+        set
+        {
+            if (_outputSize == value) return;
+            _outputSize = value;
+            OnPropertyChanged();
+        }
+    }
     public FileKind Kind { get; }
     public IReadOnlyList<string> TargetFormats { get; }
     public bool IsCompressionMode
