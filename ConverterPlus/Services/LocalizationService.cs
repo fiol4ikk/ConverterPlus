@@ -56,6 +56,7 @@ internal static class LocalizationService
             ["conversionStatus"] = ("Choose a format for each file, then select Convert.", "Выберите формат для каждого файла и нажмите «Конвертировать»."),
             ["compressionStatus"] = ("Set a target size, then select Compress files.", "Укажите максимальный размер результата и нажмите «Сжать файлы»."),
             ["compressionSkipped"] = ("Compression supports images, audio and video. Other files are skipped.", "Сжимаются изображения, аудио и видео; остальные файлы пропускаются."),
+            ["videoDurationError"] = ("Could not read the video duration, so target-size compression was stopped.", "Не удалось определить длительность видео, поэтому сжатие до заданного размера отменено."),
             ["convertButton"] = ("Convert", "Конвертировать"),
             ["compressButton"] = ("Compress files", "Сжать файлы"),
             ["cancel"] = ("Cancel", "Отменить"),

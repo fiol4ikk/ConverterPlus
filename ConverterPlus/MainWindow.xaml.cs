@@ -801,6 +801,8 @@ public partial class MainWindow : Window
             return T("unsupported");
         if (message.Contains("Для аудио и видео нужен FFmpeg", StringComparison.Ordinal))
             return T("ffmpegError");
+        if (message.Contains("Не удалось определить длительность видео", StringComparison.Ordinal))
+            return T("videoDurationError");
         if (message.Contains("Для документов установите бесплатный LibreOffice", StringComparison.Ordinal))
             return T("officeError");
         if (message.Contains("LibreOffice не создал файл", StringComparison.Ordinal))

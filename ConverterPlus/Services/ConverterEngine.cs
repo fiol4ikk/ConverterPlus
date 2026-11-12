@@ -42,8 +42,13 @@ internal static class ConverterEngine
                             await Task.Run(() => ConvertImage(item.SourcePath, tempPath), cancellationToken);
                         break;
                     case FileKind.Audio:
-                    case FileKind.Video:
                         await ConvertMediaAsync(item, tempPath, cancellationToken, targetBytes);
+                        break;
+                    case FileKind.Video:
+                        if (targetBytes.HasValue)
+                            await ConvertVideoToTargetAsync(item, tempPath, targetBytes.Value, cancellationToken);
+                        else
+                            await ConvertMediaAsync(item, tempPath, cancellationToken);
                         break;
                     case FileKind.TextDocument:
                     case FileKind.Spreadsheet:
@@ -108,6 +113,14 @@ internal static class ConverterEngine
     }
 
     private static async Task ConvertMediaAsync(ConversionItem item, string outputPath, CancellationToken cancellationToken, long? targetBytes = null)
+        => await ConvertMediaAsync(item, outputPath, cancellationToken, targetBytes, null);
+
+    private static async Task ConvertMediaAsync(
+        ConversionItem item,
+        string outputPath,
+        CancellationToken cancellationToken,
+        long? targetBytes,
+        double? durationOverride)
     {
         var ffmpeg = FindFfmpeg() ?? throw new InvalidOperationException("Для аудио и видео нужен FFmpeg. Переустановите приложение, чтобы восстановить его.");
         var args = new List<string> { "-hide_banner", "-loglevel", "error", "-nostdin", "-y", "-i", item.SourcePath };
@@ -116,7 +129,9 @@ internal static class ConverterEngine
         var audioBitrate = quality <= 70 ? "96k" : quality <= 85 ? "160k" : "256k";
         var audioQuality = quality <= 70 ? "2" : quality <= 85 ? "4" : "6";
         var videoQuality = quality <= 70 ? "7" : quality <= 85 ? "5" : "3";
-        var duration = targetBytes.HasValue ? await ProbeDurationAsync(ffmpeg, item.SourcePath, cancellationToken) : null;
+        var duration = targetBytes.HasValue
+            ? durationOverride ?? await ProbeDurationAsync(ffmpeg, item.SourcePath, cancellationToken)
+            : null;
         long? totalBitrate = duration is > 0
             ? (long)(targetBytes!.Value * 8d * 0.9d / duration.Value)
             : null;
@@ -201,6 +216,37 @@ internal static class ConverterEngine
 
         args.Add(outputPath);
         await RunProcessAsync(ffmpeg, args, cancellationToken);
+    }
+
+    private static async Task ConvertVideoToTargetAsync(
+        ConversionItem item,
+        string outputPath,
+        long targetBytes,
+        CancellationToken cancellationToken)
+    {
+        var ffmpeg = FindFfmpeg() ?? throw new InvalidOperationException("Для аудио и видео нужен FFmpeg. Переустановите приложение, чтобы восстановить его.");
+        var duration = await ProbeDurationAsync(ffmpeg, item.SourcePath, cancellationToken);
+        if (duration is not > 0)
+            throw new InvalidOperationException("Не удалось определить длительность видео, поэтому сжатие до заданного размера отменено.");
+
+        var bitrateTargetBytes = targetBytes;
+        for (var attempt = 0; attempt < 6; attempt++)
+        {
+            TryDelete(outputPath);
+            await ConvertMediaAsync(item, outputPath, cancellationToken, bitrateTargetBytes, duration);
+            var outputBytes = new FileInfo(outputPath).Length;
+            if (outputBytes <= targetBytes)
+                return;
+
+            if (attempt == 5)
+                return;
+
+            var correction = Math.Clamp((double)targetBytes / outputBytes * 0.88, 0.2, 0.85);
+            var nextTarget = (long)(bitrateTargetBytes * correction);
+            if (nextTarget >= bitrateTargetBytes)
+                return;
+            bitrateTargetBytes = Math.Max(1, nextTarget);
+        }
     }
 
     private static async Task<bool> IsNvencAvailableAsync(string ffmpeg, CancellationToken cancellationToken)

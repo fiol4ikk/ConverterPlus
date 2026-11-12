@@ -129,7 +129,7 @@
                            Margin="0,0,0,10" />
                 <Grid Margin="0,0,0,8">
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                    <TextBlock x:Name="CurrentVersionLabel" Text="Current version: 1.0.4" Foreground="{DynamicResource Muted}"
+                    <TextBlock x:Name="CurrentVersionLabel" Text="Current version: 1.0.5" Foreground="{DynamicResource Muted}"
                                VerticalAlignment="Center" />
                     <Button x:Name="CheckUpdatesButton" Grid.Column="1" Content="Check for updates" Click="CheckUpdates_Click"
                             Padding="10,6" />
