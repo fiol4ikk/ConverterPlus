@@ -193,7 +193,7 @@ internal static class ConverterEngine
                     else
                     {
                         args.AddRange(chosenVideoBitrate is not null
-                            ? ["-c:v", "libopenh264", "-rc_mode", "bitrate", "-allow_skip_frames", "1", "-b:v", chosenVideoBitrate]
+                            ? ["-c:v", "libopenh264", "-rc_mode", "bitrate", "-b:v", chosenVideoBitrate]
                             : ["-c:v", "mpeg4", "-q:v", videoQuality]);
                     }
                     args.AddRange(["-c:a", "aac", "-b:a", chosenAudioBitrate]);
@@ -201,7 +201,7 @@ internal static class ConverterEngine
                     break;
                 case "avi":
                     args.AddRange(chosenVideoBitrate is not null
-                        ? ["-c:v", "libopenh264", "-rc_mode", "bitrate", "-allow_skip_frames", "1", "-b:v", chosenVideoBitrate, "-c:a", "libmp3lame", "-b:a", chosenAudioBitrate]
+                        ? ["-c:v", "libopenh264", "-rc_mode", "bitrate", "-b:v", chosenVideoBitrate, "-c:a", "libmp3lame", "-b:a", chosenAudioBitrate]
                         : ["-c:v", "mpeg4", "-q:v", videoQuality, "-c:a", "libmp3lame", "-b:a", chosenAudioBitrate]);
                     break;
                 case "webm":
