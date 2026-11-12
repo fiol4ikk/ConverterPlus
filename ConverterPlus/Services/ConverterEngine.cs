@@ -64,6 +64,12 @@ internal static class ConverterEngine
             if (targetBytes.HasValue && item.Kind == FileKind.Image && extension is ("jpg" or "jpeg" or "webp" or "avif"))
                 await ReduceImageToTargetAsync(item.SourcePath, tempPath, targetBytes.Value, cancellationToken);
 
+            if (shouldCompress && new FileInfo(tempPath).Length > new FileInfo(item.SourcePath).Length)
+            {
+                TryDelete(tempPath);
+                File.Copy(item.SourcePath, tempPath);
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             File.Move(tempPath, outputPath);
             return new FileInfo(outputPath).Length;
@@ -227,7 +233,10 @@ internal static class ConverterEngine
         var ffmpeg = FindFfmpeg() ?? throw new InvalidOperationException("Для аудио и видео нужен FFmpeg. Переустановите приложение, чтобы восстановить его.");
         var duration = await ProbeDurationAsync(ffmpeg, item.SourcePath, cancellationToken);
         if (duration is not > 0)
-            throw new InvalidOperationException("Не удалось определить длительность видео, поэтому сжатие до заданного размера отменено.");
+        {
+            File.Copy(item.SourcePath, outputPath);
+            return;
+        }
 
         var bitrateTargetBytes = targetBytes;
         for (var attempt = 0; attempt < 6; attempt++)
@@ -248,8 +257,6 @@ internal static class ConverterEngine
             bitrateTargetBytes = Math.Max(1, nextTarget);
         }
 
-        TryDelete(outputPath);
-        throw new InvalidOperationException("Видео не удалось сжать до заданного размера после нескольких попыток.");
     }
 
     private static async Task<bool> IsNvencAvailableAsync(string ffmpeg, CancellationToken cancellationToken)

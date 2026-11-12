@@ -176,7 +176,9 @@ public partial class MainWindow : Window
                 item.Status = T("ready");
             }
             else if (status.StartsWith("Готово, больше цели: ", StringComparison.Ordinal)
-                || status.StartsWith("Done, over target: ", StringComparison.Ordinal))
+                || status.StartsWith("Готово, цель не достигнута: ", StringComparison.Ordinal)
+                || status.StartsWith("Done, over target: ", StringComparison.Ordinal)
+                || status.StartsWith("Done, target not reached: ", StringComparison.Ordinal))
             {
                 var separator = status.IndexOf(':');
                 item.Status = string.Format(T("readyOverTarget"), separator >= 0 ? status[(separator + 1)..].Trim() : status);
@@ -801,10 +803,6 @@ public partial class MainWindow : Window
             return T("unsupported");
         if (message.Contains("Для аудио и видео нужен FFmpeg", StringComparison.Ordinal))
             return T("ffmpegError");
-        if (message.Contains("Не удалось определить длительность видео", StringComparison.Ordinal))
-            return T("videoDurationError");
-        if (message.Contains("Видео не удалось сжать до заданного размера", StringComparison.Ordinal))
-            return T("videoTargetError");
         if (message.Contains("Для документов установите бесплатный LibreOffice", StringComparison.Ordinal))
             return T("officeError");
         if (message.Contains("LibreOffice не создал файл", StringComparison.Ordinal))
