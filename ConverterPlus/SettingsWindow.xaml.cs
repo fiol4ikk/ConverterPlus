@@ -4,6 +4,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
+using System.Reflection;
+using System.Text.Json;
 using System.Windows.Navigation;
 using ConverterPlus.Models;
 using ConverterPlus.Services;
@@ -12,6 +16,11 @@ namespace ConverterPlus;
 
 public partial class SettingsWindow : Window
 {
+    private const string LatestReleaseApi = "https://api.github.com/repos/fiol4ikk/ConverterPlus/releases/latest";
+    private const string ReleasesPage = "https://github.com/fiol4ikk/ConverterPlus/releases";
+    private static readonly HttpClient UpdateClient = CreateUpdateClient();
+    private readonly Version _currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 0, 0);
+    private string _releaseUrl = ReleasesPage;
     private const int WmNcHitTest = 0x0084;
     private const int HtTop = 12;
     private const int HtTopLeft = 13;
@@ -139,6 +148,11 @@ public partial class SettingsWindow : Window
         OpenFolderCheck.Content = T("openFolderAfter");
         DeveloperAboutText.Text = T("developerAbout");
         DonationAboutText.Text = T("donationLinkAbout");
+        UpdatesLabel.Text = T("updates");
+        CurrentVersionLabel.Text = string.Format(T("currentVersion"), _currentVersion.ToString(3));
+        CheckUpdatesButton.Content = T("checkUpdates");
+        CheckUpdatesButton.ToolTip = T("updateCheckTip");
+        OpenReleaseButton.Content = T("openRelease");
         DefaultsButton.Content = T("defaults");
         CloseSettingsButton.Content = T("closeSettings");
         ApplySettingsButton.Content = T("apply");
@@ -175,6 +189,61 @@ public partial class SettingsWindow : Window
     }
 
     private void Apply_Click(object sender, RoutedEventArgs e) => SettingsApplied?.Invoke(this, EventArgs.Empty);
+
+    private async void CheckUpdates_Click(object sender, RoutedEventArgs e)
+    {
+        CheckUpdatesButton.IsEnabled = false;
+        OpenReleaseButton.Visibility = Visibility.Collapsed;
+        UpdateStatusText.Text = T("checkingUpdates");
+        try
+        {
+            using var response = await UpdateClient.GetAsync(LatestReleaseApi);
+            response.EnsureSuccessStatusCode();
+            await using var stream = await response.Content.ReadAsStreamAsync();
+            using var document = await JsonDocument.ParseAsync(stream);
+            var root = document.RootElement;
+            var tag = root.GetProperty("tag_name").GetString() ?? throw new InvalidDataException("Missing release tag.");
+            _releaseUrl = root.TryGetProperty("html_url", out var urlElement)
+                ? urlElement.GetString() ?? ReleasesPage
+                : ReleasesPage;
+            var releaseVersionText = tag.TrimStart('v', 'V');
+            if (!Version.TryParse(releaseVersionText, out var releaseVersion))
+                throw new InvalidDataException($"Unrecognized release version: {tag}");
+
+            if (releaseVersion > _currentVersion)
+            {
+                UpdateStatusText.Text = string.Format(T("updateAvailable"), releaseVersion);
+                OpenReleaseButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                UpdateStatusText.Text = T("noUpdates");
+                _releaseUrl = ReleasesPage;
+                OpenReleaseButton.Visibility = Visibility.Visible;
+            }
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or JsonException or InvalidDataException or KeyNotFoundException)
+        {
+            UpdateStatusText.Text = string.Format(T("updateCheckFailed"), ex.Message);
+            _releaseUrl = ReleasesPage;
+            OpenReleaseButton.Visibility = Visibility.Visible;
+        }
+        finally
+        {
+            CheckUpdatesButton.IsEnabled = true;
+        }
+    }
+
+    private void OpenRelease_Click(object sender, RoutedEventArgs e) =>
+        Process.Start(new ProcessStartInfo(_releaseUrl) { UseShellExecute = true });
+
+    private static HttpClient CreateUpdateClient()
+    {
+        var client = new HttpClient { Timeout = TimeSpan.FromSeconds(12) };
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("ConverterPlus-UpdateChecker/1.0");
+        client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
+        return client;
+    }
 
     private void DeveloperLink_RequestNavigate(object sender, RequestNavigateEventArgs e)
     {

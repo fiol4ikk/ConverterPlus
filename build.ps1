@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "1.0.2"
+    [string]$Version = "1.0.3"
 )
 
 $ErrorActionPreference = "Stop"
@@ -48,6 +48,7 @@ New-Item -ItemType Directory -Force $PublishDir | Out-Null
 & $Dotnet publish (Join-Path $Root "ConverterPlus\ConverterPlus.csproj") `
     --configuration Release --runtime win-x64 --self-contained true `
     --output $PublishDir `
+    -p:Version=$Version `
     -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true `
     -p:EnableCompressionInSingleFile=true -p:DebugType=None
 if ($LASTEXITCODE -ne 0) { throw "Публикация приложения завершилась с ошибкой." }

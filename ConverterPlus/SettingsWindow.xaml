@@ -123,6 +123,19 @@
                           Foreground="{DynamicResource Ink}" Margin="0,0,0,10" />
                 <CheckBox x:Name="OpenFolderCheck" Content="Open output folder after processing" IsChecked="{Binding OpenOutputFolderAfterConversion, UpdateSourceTrigger=PropertyChanged}"
                           Foreground="{DynamicResource Ink}" Margin="0,0,0,10" />
+                <Border Height="1" Background="{DynamicResource Line}" Margin="0,6,0,14" />
+                <TextBlock x:Name="UpdatesLabel" Text="Updates" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource Ink}"
+                           Margin="0,0,0,10" />
+                <Grid Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock x:Name="CurrentVersionLabel" Text="Current version: 1.0.3" Foreground="{DynamicResource Muted}"
+                               VerticalAlignment="Center" />
+                    <Button x:Name="CheckUpdatesButton" Grid.Column="1" Content="Check for updates" Click="CheckUpdates_Click"
+                            Padding="10,6" />
+                </Grid>
+                <TextBlock x:Name="UpdateStatusText" Foreground="{DynamicResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,6" />
+                <Button x:Name="OpenReleaseButton" Content="Open GitHub release" Click="OpenRelease_Click"
+                        HorizontalAlignment="Left" Padding="10,6" Visibility="Collapsed" Margin="0,0,0,10" />
                 <TextBlock Foreground="{DynamicResource Muted}" FontSize="11" Margin="0,8,0,8" TextWrapping="Wrap">
                     <Run x:Name="DeveloperAboutText" Text="Guns.lol — developer's social links: " />
                     <Hyperlink NavigateUri="https://guns.lol/fiolo4kap" RequestNavigate="DeveloperLink_RequestNavigate"
