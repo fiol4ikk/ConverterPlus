@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>ConverterPlus</AssemblyName>
     <RootNamespace>ConverterPlus</RootNamespace>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\converter-icon.ico</ApplicationIcon>
   </PropertyGroup>

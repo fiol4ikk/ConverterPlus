@@ -108,6 +108,7 @@ internal static class LocalizationService
             ["solid"] = ("Solid", "Сплошной"),
             ["accent"] = ("Accent color", "Цвет акцента"),
             ["teal"] = ("Teal", "Бирюзовый"),
+            ["green"] = ("Green", "Зелёный"),
             ["blue"] = ("Blue", "Синий"),
             ["rose"] = ("Rose", "Розовый"),
             ["orange"] = ("Orange", "Оранжевый"),

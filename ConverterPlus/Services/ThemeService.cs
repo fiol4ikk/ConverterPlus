@@ -68,8 +68,8 @@ internal static class ThemeService
             "Blue" => dark ? "FF3A91D8" : "FF005A9E",
             "Rose" => dark ? "FFE56D93" : "FFA82F5A",
             "Orange" => dark ? "FFE58A35" : "FF914500",
-            "Violet" => dark ? "FFAA94E4" : "FF61439A",
-            _ => dark ? "FF45B8A1" : "FF066B5A"
+            "Violet" => dark ? "FFB69CFF" : "FF7040D8",
+            _ => dark ? "FF35D39A" : "FF008A5B"
         }));
         SetBrush("HoverSurface", ColorFromHex(dark ? "E8343C42" : transparent ? blurMaterial ? "78E7F0ED" : "DDF0F5F4" : "FFF0F5F4"));
         SetBrush("SelectedSurface", ColorFromHex(dark
@@ -164,8 +164,9 @@ internal static class ThemeService
         "Blue" => "FF0078D4",
         "Rose" => "FFC43B6B",
         "Orange" => "FFB45A00",
-        "Violet" => "FF7357AA",
-        _ => "FF7357AA"
+        "Violet" => "FF8B5CF6",
+        "Teal" => "FF10B981",
+        _ => "FF8B5CF6"
     });
 
     private static Color ColorFromHex(string value) => (Color)ColorConverter.ConvertFromString($"#{value}")!;

@@ -37,6 +37,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid Margin="0,0,0,12" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
@@ -94,9 +95,9 @@
                     <Grid.ColumnDefinitions><ColumnDefinition Width="142" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
                     <TextBlock x:Name="AccentLabel" Text="Accent color" Foreground="{DynamicResource Muted}" VerticalAlignment="Center" />
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <RadioButton x:Name="TealAccent" GroupName="Accent" Tag="Teal" Style="{StaticResource AccentSwatch}"
-                                     ToolTip="Бирюзовый" AutomationProperties.Name="Бирюзовый" Checked="Accent_Checked">
-                        <Ellipse Width="20" Height="20" Fill="#087F6B" />
+                        <RadioButton x:Name="VioletAccent" GroupName="Accent" Tag="Violet" Style="{StaticResource AccentSwatch}"
+                                     ToolTip="Фиолетовый" AutomationProperties.Name="Фиолетовый" Checked="Accent_Checked">
+                            <Ellipse Width="20" Height="20" Fill="#8B5CF6" />
                         </RadioButton>
                         <RadioButton x:Name="BlueAccent" GroupName="Accent" Tag="Blue" Style="{StaticResource AccentSwatch}"
                                      ToolTip="Синий" AutomationProperties.Name="Синий" Checked="Accent_Checked">
@@ -110,9 +111,9 @@
                                      ToolTip="Оранжевый" AutomationProperties.Name="Оранжевый" Checked="Accent_Checked">
                         <Ellipse Width="20" Height="20" Fill="#B45A00" />
                         </RadioButton>
-                        <RadioButton x:Name="VioletAccent" GroupName="Accent" Tag="Violet" Style="{StaticResource AccentSwatch}"
-                                     ToolTip="Фиолетовый" AutomationProperties.Name="Фиолетовый" Checked="Accent_Checked">
-                        <Ellipse Width="20" Height="20" Fill="#7357AA" />
+                        <RadioButton x:Name="TealAccent" GroupName="Accent" Tag="Teal" Style="{StaticResource AccentSwatch}"
+                                     ToolTip="Зелёный" AutomationProperties.Name="Зелёный" Checked="Accent_Checked">
+                            <Ellipse Width="20" Height="20" Fill="#10B981" />
                         </RadioButton>
                     </StackPanel>
                 </Grid>
@@ -128,7 +129,7 @@
                            Margin="0,0,0,10" />
                 <Grid Margin="0,0,0,8">
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                    <TextBlock x:Name="CurrentVersionLabel" Text="Current version: 1.0.3" Foreground="{DynamicResource Muted}"
+                    <TextBlock x:Name="CurrentVersionLabel" Text="Current version: 1.0.4" Foreground="{DynamicResource Muted}"
                                VerticalAlignment="Center" />
                     <Button x:Name="CheckUpdatesButton" Grid.Column="1" Content="Check for updates" Click="CheckUpdates_Click"
                             Padding="10,6" />
@@ -136,19 +137,24 @@
                 <TextBlock x:Name="UpdateStatusText" Foreground="{DynamicResource Muted}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,6" />
                 <Button x:Name="OpenReleaseButton" Content="Open GitHub release" Click="OpenRelease_Click"
                         HorizontalAlignment="Left" Padding="10,6" Visibility="Collapsed" Margin="0,0,0,10" />
-                <TextBlock Foreground="{DynamicResource Muted}" FontSize="11" Margin="0,8,0,8" TextWrapping="Wrap">
-                    <Run x:Name="DeveloperAboutText" Text="Guns.lol — developer's social links: " />
-                    <Hyperlink NavigateUri="https://guns.lol/fiolo4kap" RequestNavigate="DeveloperLink_RequestNavigate"
-                               Foreground="{DynamicResource Accent}" Cursor="Hand">guns.lol/fiolo4kap</Hyperlink>
-                    <LineBreak />
-                    <Run x:Name="DonationAboutText" Text="Support the project: " />
-                    <Hyperlink NavigateUri="https://www.donationalerts.com/r/fiol4ik" RequestNavigate="DeveloperLink_RequestNavigate"
-                               Foreground="{DynamicResource Accent}" Cursor="Hand">Donate</Hyperlink>
-                </TextBlock>
             </StackPanel>
         </ScrollViewer>
 
-        <Grid Grid.Row="2" Margin="0,16,0,0">
+        <StackPanel Grid.Row="2" Margin="0,8,0,0">
+            <Border Height="1" Background="{DynamicResource Line}" Margin="0,0,0,8" />
+            <TextBlock Foreground="{DynamicResource Muted}" FontSize="11" TextWrapping="Wrap">
+                <Run x:Name="DeveloperAboutText" Text="Guns.lol — developer's social links: " />
+                <Hyperlink NavigateUri="https://guns.lol/fiolo4kap" RequestNavigate="DeveloperLink_RequestNavigate"
+                           Foreground="{DynamicResource Accent}" Cursor="Hand">guns.lol/fiolo4kap</Hyperlink>
+            </TextBlock>
+            <TextBlock Foreground="{DynamicResource Muted}" FontSize="11" Margin="0,2,0,0">
+                <Run x:Name="DonationAboutText" Text="Support the project: " />
+                <Hyperlink NavigateUri="https://www.donationalerts.com/r/fiol4ik" RequestNavigate="DeveloperLink_RequestNavigate"
+                           Foreground="{DynamicResource Accent}" Cursor="Hand">Donate</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+
+        <Grid Grid.Row="3" Margin="0,12,0,0">
             <Button x:Name="DefaultsButton" Content="Defaults" HorizontalAlignment="Left" Click="Reset_Click" Padding="12,8" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="CloseSettingsButton" Content="Close" IsCancel="True" Padding="14,8" Margin="0,0,8,0" />

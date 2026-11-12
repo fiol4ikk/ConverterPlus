@@ -157,7 +157,7 @@ public partial class SettingsWindow : Window
         CloseSettingsButton.Content = T("closeSettings");
         ApplySettingsButton.Content = T("apply");
 
-        SetAccentName(TealAccent, "teal");
+        SetAccentName(TealAccent, "green");
         SetAccentName(BlueAccent, "blue");
         SetAccentName(RoseAccent, "rose");
         SetAccentName(OrangeAccent, "orange");
