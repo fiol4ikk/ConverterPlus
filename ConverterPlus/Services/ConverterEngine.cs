@@ -183,7 +183,7 @@ internal static class ConverterEngine
                     if (useNvenc)
                     {
                         if (chosenVideoBitrate is not null)
-                            args.AddRange(["-c:v", "h264_nvenc", "-preset", "p4", "-b:v", chosenVideoBitrate, "-maxrate", chosenVideoBitrate, "-bufsize", chosenVideoBitrate]);
+                            args.AddRange(["-c:v", "h264_nvenc", "-preset", "p4", "-rc", "vbr", "-b:v", chosenVideoBitrate, "-maxrate", chosenVideoBitrate, "-bufsize", chosenVideoBitrate]);
                         else
                         {
                             var cq = (int)Math.Round(42 - (quality - 60) * 0.6);
