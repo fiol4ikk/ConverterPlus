@@ -1,0 +1,175 @@
+using System.Globalization;
+
+namespace ConverterPlus.Services;
+
+internal static class LocalizationService
+{
+    private static readonly IReadOnlyDictionary<string, (string En, string Ru)> Texts =
+        new Dictionary<string, (string En, string Ru)>(StringComparer.Ordinal)
+        {
+            ["appTitle"] = ("Converter+", "Конвертер+"),
+            ["compressTitle"] = ("Compress+", "Сжатие+"),
+            ["compressionMode"] = ("Compress", "Сжать"),
+            ["conversionMode"] = ("Converter", "Конвертер"),
+            ["convertSubtitle"] = ("File conversion", "Преобразование файлов"),
+            ["compressSubtitle"] = ("File compression", "Сжатие файлов"),
+            ["settings"] = ("Settings", "Настройки"),
+            ["settingsTip"] = ("App settings", "Настройки приложения"),
+            ["switchMode"] = ("Switch mode", "Переключить режим"),
+            ["quickStart"] = ("Quick start", "Быстрый старт"),
+            ["minimize"] = ("Minimize", "Свернуть"),
+            ["maximize"] = ("Maximize", "Развернуть"),
+            ["restore"] = ("Restore", "Восстановить"),
+            ["close"] = ("Close", "Закрыть"),
+            ["outputFolder"] = ("Save to", "Папка сохранения"),
+            ["outputFolderTip"] = ("Folder for completed files", "Папка, куда будут сохранены готовые файлы"),
+            ["chooseFolder"] = ("Choose folder", "Выбрать папку"),
+            ["files"] = ("Files", "Файлы"),
+            ["queueEmpty"] = ("Queue is empty", "Очередь пуста"),
+            ["filesInQueue"] = ("Files in queue: {0}", "Файлов в очереди: {0}"),
+            ["addFiles"] = ("Add files", "Добавить файлы"),
+            ["officeButton"] = ("LibreOffice", "LibreOffice"),
+            ["clear"] = ("Clear", "Очистить"),
+            ["dropConvert"] = ("Drop files here", "Перетащите файлы сюда"),
+            ["dropCompress"] = ("Add files to compress", "Добавьте файлы для сжатия"),
+            ["dropHint"] = ("or choose files with Add files", "или добавьте их кнопкой «Добавить файлы»"),
+            ["supportedFormats"] = ("Images  ·  Audio  ·  Video  ·  Documents", "Изображения  ·  Аудио  ·  Видео  ·  Документы"),
+            ["headerFile"] = ("File", "Файл"),
+            ["headerSize"] = ("Size", "Размер"),
+            ["headerFormat"] = ("Format", "Формат"),
+            ["headerStatus"] = ("Status", "Состояние"),
+            ["copyPath"] = ("Copy path", "Копировать путь"),
+            ["removeQueue"] = ("Remove from queue", "Убрать из очереди"),
+            ["removeTip"] = ("Remove file", "Убрать из очереди"),
+            ["addFilesStart"] = ("Add files to get started", "Добавьте файлы для начала"),
+            ["quality"] = ("Quality", "Качество"),
+            ["qualityTip"] = ("Higher quality can increase file size and processing time.", "Более высокое качество может увеличить размер файла и время обработки."),
+            ["qualityHint"] = ("Higher quality takes longer", "Выше качество — дольше обработка"),
+            ["qualitySliderTip"] = ("Controls JPEG, PNG, WebP, audio and video encoding. Lossless WAV/FLAC may not change size.", "Сжатие JPEG, PNG, WebP, аудио и видео. Lossless WAV/FLAC могут не менять размер."),
+            ["qualityEntryTip"] = ("Enter a value from 60 to 100%", "Введите значение от 60 до 100%"),
+            ["targetSize"] = ("Size up to", "Размер до"),
+            ["targetSizeTip"] = ("Desired maximum output size. Limit: 999 MB or 100 GB.", "Максимальный желаемый размер. Предел: 999 МБ или 100 ГБ."),
+            ["unitTip"] = ("Target size unit", "Единица целевого размера"),
+            ["megabytes"] = ("Megabytes (MB)", "Мегабайты (МБ)"),
+            ["gigabytes"] = ("Gigabytes (GB)", "Гигабайты (ГБ)"),
+            ["targetInvalid"] = ("Enter a size within the selected unit limit.", "Введите размер в пределах лимита выбранной единицы."),
+            ["conversionStatus"] = ("Choose a format for each file, then select Convert.", "Выберите формат для каждого файла и нажмите «Конвертировать»."),
+            ["compressionStatus"] = ("Set a target size, then select Compress files.", "Укажите максимальный размер результата и нажмите «Сжать файлы»."),
+            ["compressionSkipped"] = ("Compression supports images, audio and video. Other files are skipped.", "Сжимаются изображения, аудио и видео; остальные файлы пропускаются."),
+            ["convertButton"] = ("Convert", "Конвертировать"),
+            ["compressButton"] = ("Compress files", "Сжать файлы"),
+            ["cancel"] = ("Cancel", "Отменить"),
+            ["cancelled"] = ("Cancelled", "Отменено"),
+            ["converting"] = ("Converting…", "Конвертация…"),
+            ["compressing"] = ("Compressing…", "Сжатие…"),
+            ["processing"] = ("Processing", "Обрабатывается"),
+            ["eta"] = ("Est. time left", "Осталось примерно"),
+            ["seconds"] = ("{0}s", "{0} с"),
+            ["minutesSeconds"] = ("{0}m {1}s", "{0} мин {1} с"),
+            ["hoursMinutes"] = ("{0}h {1}m", "{0} ч {1} мин"),
+            ["ready"] = ("Ready", "Готово"),
+            ["readyForConversion"] = ("Ready to convert", "Готов к конвертации"),
+            ["unsupported"] = ("Not supported", "Не поддерживается"),
+            ["readyOverTarget"] = ("Done, over target: {0}", "Готово, больше цели: {0}"),
+            ["unsupportedCount"] = ("Added {0}; unsupported: {1}.", "Файлов добавлено: {0}; неподдерживаемых: {1}."),
+            ["convertedCount"] = ("Completed. Files processed: {0}.", "Готово. Файлов обработано: {0}."),
+            ["finishedCounts"] = ("Finished. Succeeded: {0}, failed: {1}.", "Завершено. Успешно: {0}, ошибок: {1}."),
+            ["stoppedCounts"] = ("Stopped. Succeeded: {0}, failed: {1}.", "Остановлено. Успешно: {0}, ошибок: {1}."),
+            ["invalidTarget"] = ("Enter a target size greater than zero and within the unit limit.", "Введите целевой размер больше нуля и в пределах лимита единицы."),
+            ["mediaReady"] = ("Audio and video ready", "Аудио и видео готовы"),
+            ["ffmpegMissing"] = ("FFmpeg not found", "FFmpeg не найден"),
+            ["officeReady"] = ("Office documents ready", "Офисные документы готовы"),
+            ["libreOfficeNeeded"] = ("LibreOffice is needed for documents", "Для документов нужен LibreOffice"),
+            ["chooseFilesTitle"] = ("Choose files to convert", "Выберите файлы для конвертации"),
+            ["allFiles"] = ("All files", "Все файлы"),
+            ["chooseOutputTitle"] = ("Output folder", "Папка для готовых файлов"),
+            ["chooseFolderError"] = ("Could not save settings: {0}", "Не удалось сохранить настройки: {0}"),
+            ["conversionError"] = ("Could not process {0}. Details are shown on its queue row.", "Не удалось обработать {0}. Подробности указаны в строке файла."),
+            ["ffmpegError"] = ("FFmpeg is required for audio and video. Reinstall the app to restore it.", "Для аудио и видео нужен FFmpeg. Переустановите приложение, чтобы восстановить его."),
+            ["officeError"] = ("Install LibreOffice to convert documents. The download button is above the file list.", "Для документов установите бесплатный LibreOffice. Кнопка загрузки находится над списком файлов."),
+            ["officeOutputError"] = ("LibreOffice did not create an output file. The selected format may not match this document.", "LibreOffice не создал файл. Возможно, этот формат не подходит для выбранного документа."),
+            ["audioFormatError"] = ("Audio format {0} is not supported.", "Формат аудио {0} не поддерживается."),
+            ["videoFormatError"] = ("Video format {0} is not supported.", "Формат видео {0} не поддерживается."),
+            ["errorPrefix"] = ("Error: {0}", "Ошибка: {0}"),
+            ["readyCount"] = ("Added files: {0}.", "Файлов добавлено: {0}."),
+            ["unsupportedFiles"] = ("Unsupported files: {0}.", "Неподдерживаемых файлов: {0}."),
+            ["settingsSubtitle"] = ("Appearance and behavior", "Внешний вид и поведение"),
+            ["personalization"] = ("Personalization", "Персонализация"),
+            ["language"] = ("Language", "Язык"),
+            ["autoLanguage"] = ("Automatic", "Автоматически"),
+            ["languageTip"] = ("Follow Windows language, or choose a language", "Язык Windows или выбранный язык"),
+            ["english"] = ("English", "Английский"),
+            ["russian"] = ("Русский", "Русский"),
+            ["theme"] = ("Theme", "Тема"),
+            ["themeSystem"] = ("Use Windows setting", "Как в Windows"),
+            ["themeLight"] = ("Light", "Светлая"),
+            ["themeDark"] = ("Dark", "Тёмная"),
+            ["material"] = ("Window material", "Материал окна"),
+            ["solid"] = ("Solid", "Сплошной"),
+            ["accent"] = ("Accent color", "Цвет акцента"),
+            ["teal"] = ("Teal", "Бирюзовый"),
+            ["blue"] = ("Blue", "Синий"),
+            ["rose"] = ("Rose", "Розовый"),
+            ["orange"] = ("Orange", "Оранжевый"),
+            ["violet"] = ("Violet", "Фиолетовый"),
+            ["behavior"] = ("Behavior", "Поведение"),
+            ["rememberFolder"] = ("Remember output folders", "Запоминать папку сохранения"),
+            ["openFolderAfter"] = ("Open output folder after conversion", "Открывать папку после конвертации"),
+            ["developerAbout"] = ("Guns.lol — developer's social links: ", "Guns.lol — ссылки на соцсети разработчика: "),
+            ["defaults"] = ("Defaults", "По умолчанию"),
+            ["closeSettings"] = ("Close", "Закрыть"),
+            ["apply"] = ("Apply", "Применить"),
+            ["applied"] = ("Settings applied", "Настройки применены"),
+            ["saveSettingsError"] = ("Could not save settings: {0}", "Не удалось сохранить настройки: {0}"),
+            ["themeTip"] = ("Choose the app language", "Выберите язык приложения"),
+            ["welcome"] = ("Welcome", "Добро пожаловать"),
+            ["welcomeBody"] = ("Converter+ converts images, audio, video and documents between formats.", "Конвертер+ помогает превращать изображения, аудио, видео и документы в нужный формат."),
+            ["weakPcWarning"] = ("Large files may take longer on less powerful PCs. The app shows each file's status and does not require Python.", "На слабых ПК и при обработке больших файлов конвертация может занимать больше времени. Приложение показывает состояние каждого файла и не требует установки Python."),
+            ["appearancePage"] = ("Windows appearance", "Оформление под Windows"),
+            ["appearanceBody"] = ("Choose the system, light or dark theme and window material in Settings.", "В настройках можно выбрать системную, светлую или тёмную тему, а также материал окна."),
+            ["appearanceDetail"] = ("Acrylic is used on Windows 11; Windows 10 selects compatible Mica. Change the accent color at any time.", "Acrylic используется в Windows 11, а на Windows 10 автоматически выбирается совместимый Mica. Цвет акцента можно изменить в любой момент."),
+            ["converterPage"] = ("Converter", "Конвертер"),
+            ["converterBody"] = ("Add files, choose an output format for each one and start conversion with one button.", "Добавляйте файлы, выбирайте для каждого выходной формат и запускайте обработку одной кнопкой."),
+            ["converterDetail"] = ("Quality affects output size and can affect processing time. Higher quality may take longer, especially for large files.", "Ползунок качества влияет на размер результата и иногда на длительность обработки: повышенное качество может потребовать больше времени, особенно для больших файлов."),
+            ["compressionPage"] = ("Compress to a target size", "Сжатие по размеру"),
+            ["compressionBody"] = ("Set the desired maximum output size. The default unit is MB; use the menu beside it to select GB.", "В режиме «Сжать» задайте желаемый максимальный размер результата. Единица по умолчанию — МБ; в меню рядом можно выбрать ГБ."),
+            ["compressionDetail"] = ("The app adjusts encoding to approach the target. Conversion and compression use separate saved output folders.", "Приложение подбирает параметры кодирования и старается уложиться в заданный размер. Для сжатия и конвертации запоминаются отдельные папки сохранения."),
+            ["finalPage"] = ("Enjoy using Converter+", "Приятного использования Converter+"),
+            ["finalBody"] = ("We hope Converter+ makes everyday file tasks a little easier.", "Надеемся, Converter+ сделает работу с файлами немного удобнее."),
+            ["finalReinstallBody"] = ("We hope Converter+ makes your file work even easier this time.", "Надеемся, в этот раз Converter+ сделает работу с файлами ещё удобнее."),
+            ["finalDetail"] = ("You can always change the appearance, language and behavior later in Settings.", "Оформление, язык и поведение приложения можно изменить позже в настройках."),
+            ["developerLinkAbout"] = ("Developer links: ", "Ссылки разработчика: "),
+            ["donationLinkAbout"] = ("Support the project: ", "Поддержать проект: "),
+            ["donation"] = ("Donate", "Донат"),
+            ["next"] = ("Next", "Далее"),
+            ["back"] = ("Back", "Назад"),
+            ["start"] = ("Get started", "Начать работу"),
+            ["filesProcessed"] = ("Files processed: {0}", "Файлов обработано: {0}"),
+            ["durationLong"] = ("Processing may take a while", "Обработка может занять время")
+        };
+
+    public static string Normalize(string? language) => language?.Trim().ToLowerInvariant() switch
+    {
+        "ru" => "ru",
+        "en" => "en",
+        _ => "auto"
+    };
+
+    public static string ResolveLanguage(string? language)
+    {
+        var normalized = Normalize(language);
+        if (normalized != "auto")
+            return normalized;
+
+        return CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.Equals("ru", StringComparison.OrdinalIgnoreCase)
+            ? "ru"
+            : "en";
+    }
+
+    public static string Get(string key, string? language)
+    {
+        if (!Texts.TryGetValue(key, out var pair))
+            return key;
+        return ResolveLanguage(language) == "ru" ? pair.Ru : pair.En;
+    }
+}

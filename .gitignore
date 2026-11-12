@@ -1,0 +1,7 @@
+.tools/
+publish/
+release/
+ConverterPlus/bin/
+ConverterPlus/obj/
+*.user
+*.suo

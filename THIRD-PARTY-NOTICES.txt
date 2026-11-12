@@ -1,0 +1,10 @@
+Конвертер+ включает FFmpeg для обработки аудио и видео.
+
+FFmpeg: https://ffmpeg.org/
+Используемая сборка: BtbN FFmpeg Builds, Windows x64, LGPL shared.
+Исходный код сборок: https://github.com/BtbN/FFmpeg-Builds
+Лицензия FFmpeg: GNU Lesser General Public License (LGPL), версия 2.1 или новее.
+Точный состав сборки указан в выводе команды ffmpeg -L.
+
+Изображения обрабатываются библиотекой Magick.NET-Q8-AnyCPU.
+Исходный код и лицензия: https://github.com/dlemstra/Magick.NET
