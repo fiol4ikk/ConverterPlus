@@ -803,6 +803,8 @@ public partial class MainWindow : Window
             return T("ffmpegError");
         if (message.Contains("Не удалось определить длительность видео", StringComparison.Ordinal))
             return T("videoDurationError");
+        if (message.Contains("Видео не удалось сжать до заданного размера", StringComparison.Ordinal))
+            return T("videoTargetError");
         if (message.Contains("Для документов установите бесплатный LibreOffice", StringComparison.Ordinal))
             return T("officeError");
         if (message.Contains("LibreOffice не создал файл", StringComparison.Ordinal))

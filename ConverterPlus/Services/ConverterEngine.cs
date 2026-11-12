@@ -239,14 +239,17 @@ internal static class ConverterEngine
                 return;
 
             if (attempt == 5)
-                return;
+                break;
 
             var correction = Math.Clamp((double)targetBytes / outputBytes * 0.88, 0.2, 0.85);
             var nextTarget = (long)(bitrateTargetBytes * correction);
             if (nextTarget >= bitrateTargetBytes)
-                return;
+                break;
             bitrateTargetBytes = Math.Max(1, nextTarget);
         }
+
+        TryDelete(outputPath);
+        throw new InvalidOperationException("Видео не удалось сжать до заданного размера после нескольких попыток.");
     }
 
     private static async Task<bool> IsNvencAvailableAsync(string ffmpeg, CancellationToken cancellationToken)
